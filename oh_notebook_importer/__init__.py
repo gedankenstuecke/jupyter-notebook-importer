@@ -1,5 +1,7 @@
 from notebook.utils import url_path_join
 from notebook.base.handlers import IPythonHandler
+from tornado import web
+from .helper import import_notebook
 
 
 def _jupyter_server_extension_paths():
@@ -9,9 +11,20 @@ def _jupyter_server_extension_paths():
 
 
 class HelloWorldHandler(IPythonHandler):
+    @web.authenticated
     def get(self):
-        print(self.request.arguments)
-        self.finish('Hello, world!')
+        notebook_location = self.get_argument('notebook_location')
+        notebook_name = self.get_argument('notebook_name')
+        notebook_name = import_notebook(notebook_location, notebook_name)
+        #self.finish('Imported notebook {}'.format(
+        #    notebook_name))
+        url = "{base}notebooks/{nbname}".format(
+                    base=self.base_url,
+                    nbname=notebook_name
+        )
+        print(url)
+        self.redirect(url)
+        #self.redirect(self.base_url)
 
 
 def load_jupyter_server_extension(nb_server_app):
@@ -19,9 +32,11 @@ def load_jupyter_server_extension(nb_server_app):
     Called when the extension is loaded.
 
     Args:
-        nb_server_app (NotebookWebApplication): handle to the Notebook webserver instance.
+        nb_server_app (NotebookWebApplication):
+            handle to the Notebook webserver instance.
     """
     web_app = nb_server_app.web_app
     host_pattern = '.*$'
-    route_pattern = url_path_join(web_app.settings['base_url'], '/hello')
+    route_pattern = url_path_join(web_app.settings['base_url'],
+                                  '/gallery-import')
     web_app.add_handlers(host_pattern, [(route_pattern, HelloWorldHandler)])
