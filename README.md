@@ -14,9 +14,19 @@ jupyter serverextension enable --py oh_notebook_importer
 ```
 
 Now you can run `jupyter notebook` as usual and you're good to go.
+To remove the development version do these steps in this order:
+
+```
+jupyter serverextension disable --py oh_notebook_importer
+pip uninstall oh_notebook_importer
+```
+
+Now everything should be restored to the earlier settings!
 
 ## Demo
-Right now this extension basically doesn't do anything at all. It follows the
-`Jupyter docs` in setting up a new handler at `/hello`, so if you head your browser
-to `localhost:8888/hello?foo=bar` it will show the hello world and also display
-the `request.arguments` on the shell. 
+This extension now properly accepts notebooks from an external URL to be imported into a user's notebook directory. Following the
+`Jupyter docs` it sets up a new handler at `/gallery-import`. This handler takes two URL encoded parameters:
+- `notebook_location`, which can be any URL behind which there is a JSON encoded `.ipynb` file, and
+- `notebook_name`, which describes the name the notebook have in the user's directory.
+
+A valid URL would be `http://localhost:8888/gallery-import?notebook_location=http://127.0.0.1:5000/export-notebook/2/&notebook_name=mylittlenotebook.ipynb`. If `mylittlenotebook.ipynb` already exists in a user's directory the date/time of the import will be appended to make it unique. 
