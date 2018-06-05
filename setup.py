@@ -17,6 +17,7 @@ setuptools.setup(
     author="Bastian Greshake Tzovaras",
     author_email="bgreshake@gmail.com",
     description="Import a notebook from Open Humans",
+    install_requires=install_requires,
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/gedankenstuecke/jupyter-bundler-openhumans",
