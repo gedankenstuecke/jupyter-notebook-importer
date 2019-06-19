@@ -15,16 +15,23 @@ class HelloWorldHandler(IPythonHandler):
     def get(self):
         notebook_location = self.get_argument('notebook_location')
         notebook_name = self.get_argument('notebook_name')
+        target = self.get_argument('target', default=None)
         notebook_name = import_notebook(notebook_location, notebook_name)
-        #self.finish('Imported notebook {}'.format(
+        # self.finish('Imported notebook {}'.format(
         #    notebook_name))
-        url = "{base}notebooks/{nbname}".format(
-                    base=self.base_url,
-                    nbname=notebook_name
-        )
+        if target == 'voila':
+            url = "{base}voila/voila/render/{nbname}".format(
+                base=self.base_url,
+                nbname=notebook_name
+            )
+        else:
+            url = "{base}notebooks/{nbname}".format(
+                        base=self.base_url,
+                        nbname=notebook_name
+            )
         print(url)
         self.redirect(url)
-        #self.redirect(self.base_url)
+        # self.redirect(self.base_url)
 
 
 def load_jupyter_server_extension(nb_server_app):
