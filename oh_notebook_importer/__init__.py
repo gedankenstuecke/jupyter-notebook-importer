@@ -20,7 +20,7 @@ class HelloWorldHandler(IPythonHandler):
         # self.finish('Imported notebook {}'.format(
         #    notebook_name))
         if target == 'voila':
-            url = "{base}voila/voila/render/{nbname}".format(
+            url = "{base}voila/render/{nbname}".format(
                 base=self.base_url,
                 nbname=notebook_name
             )
